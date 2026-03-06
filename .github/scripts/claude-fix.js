@@ -117,7 +117,11 @@ async function createPR(branch, title, body) {
     ghHeaders(),
     { title, body, head: branch, base: 'main' }
   );
-  return res.body.html_url;
+  if (res.status === 201) {
+    return res.body.html_url;
+  }
+  console.error(`PR creation failed — HTTP ${res.status}:`, JSON.stringify(res.body));
+  return null;
 }
 
 // --- Main ---
@@ -172,12 +176,19 @@ async function main() {
   const branch = `ai-fix/issue-${ISSUE_NUMBER}`;
   const shortTitle = ISSUE_TITLE.replace(/\[AI Review\] CRITICAL:\s*/i, '').slice(0, 72);
 
-  execSync('git config user.email "ai-fix@torchlit-games"');
-  execSync('git config user.name "TorchLit AI Fix"');
-  execSync(`git checkout -b ${branch}`);
-  execSync(`git add ${filePath}`);
-  execSync(`git commit -m "[AI-FIX] fix: ${shortTitle} — closes #${ISSUE_NUMBER}"`);
-  execSync(`git push origin ${branch}`);
+  const run = (cmd) => {
+    console.log(`$ ${cmd}`);
+    const out = execSync(cmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] });
+    if (out) console.log(out.trim());
+    return out;
+  };
+
+  run('git config user.email "ai-fix@torchlit-games"');
+  run('git config user.name "TorchLit AI Fix"');
+  run(`git checkout -b ${branch}`);
+  run(`git add ${filePath}`);
+  run(`git commit -m "[AI-FIX] fix: ${shortTitle} (closes #${ISSUE_NUMBER})"`);
+  run(`git push origin ${branch}`);
   console.log(`Pushed branch ${branch}`);
 
   // Open PR
@@ -195,9 +206,14 @@ Closes #${ISSUE_NUMBER}
 _Review carefully before merging — this was generated automatically._`;
 
   const prUrl = await createPR(branch, prTitle, prBody);
-  console.log(`PR created: ${prUrl}`);
 
-  await commentOnIssue(`_AI Auto-Fix: PR opened — ${prUrl}_`);
+  if (prUrl) {
+    console.log(`PR created: ${prUrl}`);
+    await commentOnIssue(`_AI Auto-Fix: PR opened — ${prUrl}_`);
+  } else {
+    console.error('PR creation returned no URL — branch was pushed but PR failed.');
+    await commentOnIssue(`_AI Auto-Fix: Branch \`${branch}\` pushed but PR creation failed. Check Actions logs for details._`);
+  }
 }
 
 main().catch(e => {
