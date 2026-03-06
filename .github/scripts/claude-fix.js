@@ -12,6 +12,8 @@ const { execSync } = require('child_process');
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+// GH_PAT is used for PR creation — GITHUB_TOKEN lacks permission for this on issues-triggered workflows
+const GH_PAT = process.env.GH_PAT || GITHUB_TOKEN;
 const ISSUE_NUMBER = process.env.ISSUE_NUMBER;
 const ISSUE_TITLE = process.env.ISSUE_TITLE || '';
 const ISSUE_BODY = process.env.ISSUE_BODY || '';
@@ -46,9 +48,9 @@ function httpRequest(method, hostname, urlPath, headers, body) {
   });
 }
 
-function ghHeaders() {
+function ghHeaders(usePat = false) {
   return {
-    'Authorization': `token ${GITHUB_TOKEN}`,
+    'Authorization': `token ${usePat ? GH_PAT : GITHUB_TOKEN}`,
     'Accept': 'application/vnd.github.v3+json',
     'Content-Type': 'application/json',
     'User-Agent': 'torchlit-ai-fix'
@@ -114,7 +116,7 @@ async function commentOnIssue(comment) {
 async function createPR(branch, title, body) {
   const res = await httpRequest(
     'POST', 'api.github.com', `/repos/${REPO}/pulls`,
-    ghHeaders(),
+    ghHeaders(true), // use PAT — GITHUB_TOKEN can't create PRs on issues-triggered workflows
     { title, body, head: branch, base: 'main' }
   );
   if (res.status === 201) {
