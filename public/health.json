@@ -1,0 +1,10 @@
+{
+  "health": "good",
+  "progress": 15,
+  "note": "Landing page live; internal dummy — iterate here",
+  "next_steps": [
+    "Pick torch icon direction from assets/options",
+    "Add favicon and final logo",
+    "Connect custom domain (torchlitgames.com)"
+  ]
+}

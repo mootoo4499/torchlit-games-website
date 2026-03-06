@@ -1,0 +1,10 @@
+{
+  "name": "torchlit_website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Static site — no build step; edit public/ and deploy'",
+    "deploy": "firebase deploy --only hosting",
+    "serve": "firebase serve"
+  }
+}
