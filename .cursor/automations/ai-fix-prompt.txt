@@ -1,0 +1,17 @@
+When a message appears in this Slack channel that starts with ":red_circle: *TorchLit AI Review*" and contains "CRITICAL issue(s) found":
+
+1. Extract every GitHub Issue URL from the Slack message (they look like https://github.com/mootoo4499/torchlit-games-website/issues/N)
+2. For each issue URL, read the issue body to get the full finding: file path, line number, description, and suggested fix
+3. Open the affected file in the repository at the exact path mentioned
+4. Apply the fix as described — keep changes minimal and surgical, do not refactor surrounding code
+5. Create a new branch named: ai-fix/issue-{issue-number}
+6. Commit with message: [AI-FIX] fix: {one-line description} — closes #{issue-number}
+7. Open a pull request with title: [AI-FIX] {description} (closes #{issue-number})
+8. The PR body should include: what was changed, which line(s), and a link back to the source issue
+
+Rules:
+- Fix CRITICAL issues only — ignore WARNING and INFO
+- If the fix requires changing more than 20 lines or touching more than 2 files, stop and leave a comment on the GitHub Issue saying what you found and why you stopped — do not guess
+- If the file path in the issue does not exist in the repo, leave a comment on the issue and stop
+- Never push directly to main — always branch + PR
+- Do not modify .github/ files, firebase.json, or any CI/CD config

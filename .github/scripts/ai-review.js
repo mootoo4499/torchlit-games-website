@@ -114,7 +114,9 @@ async function sendSlack(review, criticalCount, issueUrls) {
     issueSection += '\n\n_To fix: open the issue, copy findings into a Cursor background agent._';
   }
 
-  const text = `${emoji} *TorchLit AI Review* | \`${COMMIT_SHA}\` by ${COMMIT_AUTHOR}\n>${COMMIT_MESSAGE.split('\n')[0].slice(0, 80)}\n\n*${status}*${issueSection}`;
+  const repoUrl = `https://github.com/${REPO}`;
+  const commitUrl = `${repoUrl}/commit/${process.env.COMMIT_SHA || ''}`;
+  const text = `${emoji} *TorchLit AI Review* | <${commitUrl}|\`${COMMIT_SHA}\`> by ${COMMIT_AUTHOR}\n>${COMMIT_MESSAGE.split('\n')[0].slice(0, 80)}\n\n*${status}*${issueSection}`;
 
   try {
     const res = await httpPost(
