@@ -1,0 +1,31 @@
+name: AI Auto-Fix
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  auto-fix:
+    name: Generate fix for CRITICAL issue
+    # Only run on issues created by our AI review bot (label: ai-review)
+    if: contains(github.event.issue.labels.*.name, 'ai-review')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Generate and apply fix
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          REPO: ${{ github.repository }}
+        run: node .github/scripts/claude-fix.js
