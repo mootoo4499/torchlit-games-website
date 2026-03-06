@@ -9,11 +9,20 @@
     "headers": [
       {
         "source": "**/*.@(html)",
+        "headers": [{ "key": "Cache-Control", "value": "no-store" }]
+      },
+      {
+        "source": "**/*.lottie",
         "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "no-store"
-          }
+          { "key": "Content-Type", "value": "application/zip" },
+          { "key": "Access-Control-Allow-Origin", "value": "*" }
+        ]
+      },
+      {
+        "source": "**/*.json",
+        "headers": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Access-Control-Allow-Origin", "value": "*" }
         ]
       }
     ]
