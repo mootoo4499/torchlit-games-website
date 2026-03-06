@@ -4,7 +4,7 @@ One-time setup. Takes about 2 minutes.
 
 ## Step 1 — Open Cursor Automations
 
-In Cursor: click the agent icon in the left sidebar → Automations → **+ New**
+Go to **cursor.com** in your browser → sign in → left sidebar → **Automations** → **+ New**
 
 ## Step 2 — Name it
 
