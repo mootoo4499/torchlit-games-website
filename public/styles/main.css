@@ -1,16 +1,14 @@
 /* styles/main.css - Global Styles and Variables */
 
 :root {
-  --bg: #F9F8F6; /* Warm off-white background */
-  --bg-gradient: #F9F8F6;
-  --text: #2B2A28; /* Charcoal text */
-  --accent: #9A8A78; /* Warm taupe accent */
-  --accent-rgb: 154, 138, 120;
-  --accent-blue: #64748B;
-  --accent-blue-rgb: 100, 116, 139;
-  --muted: #6B6A68;
-  --nav-bg: rgba(249, 248, 246, 0.85); /* Light glass nav */
-  --glass-border: rgba(0, 0, 0, 0.05);
+  --bg: #F7F5F0; /* Elegant soft cream/off-white background */
+  --bg-gradient: #F7F5F0;
+  --text: #222222; /* Deep jet/charcoal text for high contrast */
+  --accent: #8A7B6B; /* Warm subdued taupe */
+  --accent-rgb: 138, 123, 107;
+  --muted: #767676;
+  --nav-bg: rgba(247, 245, 240, 0.92); /* Frosted cream nav */
+  --glass-border: rgba(0, 0, 0, 0.08); /* Subtle dark border lines */
 }
 
 /* Base Resets */
@@ -24,7 +22,8 @@ html {
   scroll-behavior: smooth;
 }
 body {
-  font-family: "Source Sans 3", sans-serif;
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
   background: var(--bg-gradient);
   color: var(--text);
   min-height: 100vh;
@@ -123,10 +122,8 @@ body {
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  font-family: "Oswald", sans-serif;
-  font-size: 1.5rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: "Playfair Display", serif;
+  font-size: 1.65rem;
   color: var(--text);
   transition: opacity 0.3s ease;
 }
@@ -152,21 +149,18 @@ body {
   display: flex;
 }
 .header__nav a {
-  font-family: "Oswald", sans-serif;
-  font-size: 0.95rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text);
   text-decoration: none;
-  transition:
-    color 0.3s ease,
-    text-shadow 0.3s ease;
+  transition: color 0.3s ease;
 }
 .header__nav a:hover,
 .header__nav a:focus {
   color: var(--accent);
-  text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.4);
 }
 
 @media (max-width: 768px) {
@@ -212,17 +206,13 @@ body {
   gap: 1.25rem;
 }
 .menu-overlay__nav a {
-  font-family: "Oswald", sans-serif;
+  font-family: "Playfair Display", serif;
   font-size: clamp(2.5rem, 8vw, 4.5rem);
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
+  font-weight: 400;
+  line-height: 1.1;
   color: var(--text);
   text-decoration: none;
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
   display: inline-block;
 }
 .menu-overlay__nav a:hover,
@@ -253,30 +243,19 @@ body {
 /* Homepage Hero Specifics */
 .lockup {
   width: min(100rem, 95vw);
-  margin-bottom: -3.5rem; /* Cut down spacing from lottie boundary by 65% */
+  margin-bottom: 2rem; /* Ensure appropriate negative space under the main header */
   animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
-  filter: drop-shadow(0 0 40px rgba(var(--accent-rgb), 0.15));
   position: relative;
   z-index: 2;
 }
-.lockup__crop {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 512 / 333;
-  overflow: hidden;
-}
-.lockup__crop dotlottie-wc {
-  display: block;
-  width: 100%;
-}
 .main__body {
-  font-family: "Source Sans 3", sans-serif;
-  font-size: clamp(1.05rem, 2.5vw, 1.2rem);
-  font-weight: 400;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  font-weight: 300;
   color: var(--text);
-  max-width: 38rem;
+  max-width: 42rem;
   margin-bottom: 2rem;
-  line-height: 1.7;
+  line-height: 1.8;
 }
 
 /* Central Call-to-Action button */
@@ -285,18 +264,18 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 48px;
-  padding: 0.8rem 2rem;
+  padding: 0.85rem 2.2rem;
   margin-top: 2rem;
   color: #fff;
-  font-family: "Oswald", sans-serif;
-  font-weight: 500;
-  font-size: 1rem;
-  letter-spacing: 0.1em;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   text-decoration: none;
   background: var(--text);
   border: 1px solid var(--text);
-  border-radius: 4px;
+  border-radius: 0; /* Sharp, modern edge for interior style */
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
 }
@@ -370,18 +349,19 @@ body {
   display: block;
 }
 .lightbox__title {
-  font-family: "Oswald", sans-serif;
-  font-size: 2rem;
-  text-transform: uppercase;
+  font-family: "Playfair Display", serif;
+  font-size: 2.2rem;
+  font-weight: 400;
   margin-bottom: 0.5rem;
-  letter-spacing: 0.05em;
   color: var(--text);
 }
 .lightbox__text {
   font-size: 1.05rem;
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
   color: var(--muted);
   margin-bottom: 2rem;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 .lightbox__form {
   display: flex;
@@ -447,7 +427,7 @@ body {
 }
 .hero__kicker {
   margin: 0 0 0.5rem;
-  font-family: "Oswald", sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 0.9rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -455,27 +435,27 @@ body {
 }
 .hero__title {
   margin: 0;
-  font-family: "Oswald", sans-serif;
-  font-weight: 500;
-  font-size: clamp(2.5rem, 8vw, 5rem);
-  line-height: 1;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  font-family: "Playfair Display", serif;
+  font-weight: 400;
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  line-height: 1.1;
+  color: var(--text);
 }
 .hero__lede {
   margin: 1.2rem 0 0;
   max-width: 60ch;
-  color: #fff;
-  font-size: clamp(1.1rem, 2.2vw, 1.25rem);
+  color: var(--text);
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
   line-height: 1.6;
 }
 .hero__body {
-  margin: 1rem 0 0;
+  margin: 1.2rem 0 0;
   max-width: 70ch;
   color: var(--muted);
   font-size: 1.05rem;
-  line-height: 1.6;
+  line-height: 1.8;
 }
 
 .logo-board {

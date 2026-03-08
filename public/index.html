@@ -8,9 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Source+Sans+3:wght@400;500;600&family=Teko:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
+  href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap"
 
     <!-- Global Stylesheet -->
     <link rel="stylesheet" href="/styles/main.css" />
@@ -39,7 +37,7 @@
       </button>
 
       <a href="/" class="header__logo" aria-label="Oliver Studio home">
-        Oliver Studio
+        <b>Oliver</b><span style="opacity: 0.6; font-style: italic; margin-left: 2px;">Studio</span>
       </a>
     </header>
 
@@ -57,14 +55,14 @@
 
     <main class="main" id="main">
       <div class="lockup" aria-label="Oliver Studio">
-        <h1 style="font-family: 'Oswald', sans-serif; font-size: clamp(3rem, 8vw, 6rem); text-transform: uppercase; margin-bottom: 0; line-height: 1; letter-spacing: 0.05em;">Oliver Studio</h1>
-        <h2 style="font-family: 'Source Sans 3', sans-serif; font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 300; margin-top: 0.5rem; color: var(--muted); margin-bottom: 3rem;">Residential &amp; Hospitality Interiors</h2>
+        <h1 style="font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 8vw, 7rem); margin-bottom: 0.5rem; line-height: 1.1; font-weight: 400;"><b>Oliver</b><span style="opacity: 0.6; font-style: italic; margin-left: 6px;">Studio</span></h1>
+        <h2 style="font-family: 'Inter', sans-serif; font-size: clamp(1rem, 2.5vw, 1.4rem); font-weight: 300; margin-top: 2rem; color: var(--muted); margin-bottom: 5rem; text-transform: uppercase; letter-spacing: 0.25em;">Residential &amp; Hospitality Interiors</h2>
       </div>
 
-      <p class="main__body reveal" style="font-size: 1.35rem; font-weight: 500; color: var(--accent);">
+      <p class="main__body reveal" style="font-size: 1.6rem; font-family: 'Playfair Display', serif; color: var(--accent); line-height: 1.6; margin-bottom: 3.5rem; max-width: 45rem;">
         We approach interiors through the lens of storytelling — layering art, furniture, lighting, and architecture to create spaces with mood, character, and depth.
       </p>
-      <p class="main__body reveal">
+      <p class="main__body reveal" style="margin-bottom: 4rem;">
         Oliver Studio is a Los Angeles–based interior studio specializing in residential and hospitality interiors. Founded by television showrunner and writer Tracy Oliver, the studio brings a cinematic approach to space — blending sculptural furniture, contemporary art, and thoughtful lighting to create environments that feel layered, expressive, and lived in.
       </p>
 
@@ -132,7 +130,49 @@
       </div>
     </div>
 
+    <footer class="footer reveal" style="width: 100%; border-top: 1px solid rgba(0,0,0,0.1); padding: 3rem 2rem; margin-top: 4rem; text-align: center;">
+      <p style="font-family: 'Inter', sans-serif; font-size: 0.9rem; color: var(--muted); margin-bottom: 0.5rem;">Oliver Studio &copy; <span id="year">2026</span>. All rights reserved.</p>
+      <p style="font-size: 0.85rem;"><a href="#" class="js-join-btn" style="color: var(--text); text-decoration: none; border-bottom: 1px solid var(--text); padding-bottom: 2px;">Contact Us</a></p>
+    </footer>
+
+    <!-- Password Protection Overlay -->
+    <div id="password-gate" style="position: fixed; inset: 0; z-index: 9999; background: var(--bg); display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 2rem;">
+      <h2 style="font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 1rem; color: var(--text);"><b>Oliver</b><span style="opacity: 0.6; font-style: italic;">Studio</span> Client Access</h2>
+      <form id="gate-form" style="display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 320px;">
+        <input type="text" id="gate-user" placeholder="Username" required style="padding: 0.85rem 1rem; font-family: 'Inter', sans-serif; font-size: 1rem; border: 1px solid rgba(0,0,0,0.2); background: transparent; outline: none;" />
+        <input type="password" id="gate-pass" placeholder="Password" required style="padding: 0.85rem 1rem; font-family: 'Inter', sans-serif; font-size: 1rem; border: 1px solid rgba(0,0,0,0.2); background: transparent; outline: none;" />
+        <button type="submit" class="btn-primary" style="margin-top: 0;">Enter</button>
+        <p id="gate-error" style="color: #c94c4c; font-size: 0.9rem; display: none; margin-top: 0.5rem;">Incorrect credentials.</p>
+      </form>
+    </div>
+
     <!-- Global Logic -->
     <script src="/scripts/main.js"></script>
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+      
+      // Password Protection Logic
+      const gate = document.getElementById('password-gate');
+      const gateForm = document.getElementById('gate-form');
+      const userField = document.getElementById('gate-user');
+      const passField = document.getElementById('gate-pass');
+      const errField = document.getElementById('gate-error');
+
+      // Check session storage so it doesn't ask on every single page load during a session
+      if(sessionStorage.getItem('oliver_auth') === 'true') {
+        gate.style.display = 'none';
+      }
+
+      gateForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if(userField.value.trim().toLowerCase() === 'oliver' && passField.value === 'password123') {
+          sessionStorage.setItem('oliver_auth', 'true');
+          gate.style.opacity = '0';
+          setTimeout(() => gate.style.display = 'none', 300);
+        } else {
+          errField.style.display = 'block';
+        }
+      });
+    </script>
   </body>
 </html>
