@@ -1,382 +1,138 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="TorchLit Games - Carry the fire." />
-  <title>TorchLit Games</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Source+Sans+3:wght@400;500&display=swap" rel="stylesheet" />
-  <!--
-    LOTTIE INTEGRATION NOTE
-    ========================
-    We use @dotlottie/player-component (pinned version — do NOT use @latest).
-    This player handles both .lottie (ZIP with embedded fonts) and .json files.
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Oliver Studio - Residential & Hospitality Interiors" />
+    <title>Oliver Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Source+Sans+3:wght@400;500;600&family=Teko:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-    CRITICAL RULES:
-    1. Always use .lottie format for animations that contain text layers.
-       .lottie is a ZIP that embeds the actual font TTF file inside it.
-       .json only stores the font NAME as a string — the browser must find
-       a matching font itself, which almost always fails with custom fonts.
+    <!-- Global Stylesheet -->
+    <link rel="stylesheet" href="/styles/main.css" />
 
-    2. Always use @dotlottie/player-component, NOT @lottiefiles/lottie-player.
-       lottie-player cannot unzip .lottie files and does not load embedded fonts.
-
-    3. Pin the version. @latest has broken releases. Use a known stable version.
-
-    4. Use background="transparent" on every dotlottie-player element to prevent
-       a white canvas box appearing behind the animation.
-
-    CURRENT ASSETS:
-    - /animations/torchlit_lockup.lottie  — main hero lockup (Teko font embedded)
-    - /animations/streak-fire-orange.json — flame icon (no text, .json is fine)
-
-    FIREBASE MIME TYPES:
-    firebase.json must include Content-Type headers for both file types:
-    - **/*.lottie  → Content-Type: application/zip
-    - **/*.json    → Content-Type: application/json
-    Without these, Firebase serves .lottie as text/plain and the player errors.
-  -->
-  <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.js" type="module"></script>
-  <style>
-    :root {
-      --bg: #232323;
-      --text: #ffffff;
-      --accent: #FF5300;
-      --accent-rgb: 255, 83, 0;
-      --accent-blue: #6E1EE5;
-      --accent-blue-rgb: 110, 30, 229;
-      --muted: #a3a3a3;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 18px; scroll-behavior: smooth; }
-    body {
-      font-family: "Source Sans 3", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      line-height: 1.5;
-      overflow-x: hidden;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      * { animation-duration: 0.01ms !important; animation-delay: 0ms !important; }
-    }
-
-    .header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 15;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 1.25rem;
-      background: linear-gradient(to bottom, rgba(35,35,35,0.96), rgba(35,35,35,0.78));
-      backdrop-filter: blur(6px);
-      animation: fadeDown 0.5s ease 0.2s both;
-    }
-    .header__menu-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 2.5rem;
-      height: 2.5rem;
-      border: 0;
-      background: transparent;
-      color: var(--text);
-      cursor: pointer;
-      padding: 0;
-    }
-    .header__menu-btn svg {
-      width: 1.25rem;
-      height: 1.25rem;
-      display: block;
-      transition: transform 0.25s ease;
-    }
-    .header__menu-btn[aria-expanded="true"] svg { transform: rotate(45deg); }
-    .header__logo {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 2.25rem;
-      height: 2.25rem;
-    }
-
-    .menu-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 14;
-      background: rgba(35,35,35,0.97);
-      visibility: hidden;
-      pointer-events: none;
-      opacity: 0;
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      padding: 6.5rem 2rem 2rem;
-      transform: translateY(-100%);
-      transition: transform 0.35s ease, opacity 0.2s ease, visibility 0.35s ease;
-    }
-    .menu-overlay.is-open {
-      visibility: visible;
-      pointer-events: auto;
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .menu-overlay__nav {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
-    }
-    .menu-overlay__nav a {
-      font-family: "Oswald", sans-serif;
-      font-size: clamp(2rem, 6vw, 4rem);
-      font-weight: 500;
-      line-height: 1;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-      color: var(--text);
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-    .menu-overlay__nav a:hover,
-    .menu-overlay__nav a:focus { color: var(--accent); }
-
-    .main {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      padding: 6rem 1.5rem 4rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      animation: fadeUp 0.8s ease 0.8s both;
-    }
-    .lockup {
-      width: min(56rem, 92vw);
-      margin-bottom: 3.5rem;
-      animation: fadeUp 0.9s ease 0.5s both;
-    }
-    .main__body {
-      font-family: "Source Sans 3", sans-serif;
-      font-size: clamp(1rem, 2.2vw, 1.15rem);
-      font-weight: 400;
-      color: var(--muted);
-      max-width: 34rem;
-      margin-bottom: 2.5rem;
-    }
-    .main__cta {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 0.7rem 1.75rem;
-      margin-top: 3rem;
-      color: var(--accent);
-      font-weight: 500;
-      font-size: 0.95rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border: 1px solid var(--accent);
-      transition: background 0.2s, color 0.2s;
-      cursor: pointer;
-      background: transparent;
-    }
-    .main__cta:hover,
-    .main__cta:focus { background: var(--accent); color: var(--bg); }
-
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 40;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(4px);
-      visibility: hidden;
-      opacity: 0;
-      transition: opacity 0.25s ease, visibility 0.25s ease;
-    }
-    .lightbox.is-open { visibility: visible; opacity: 1; }
-    .lightbox__card {
-      background: var(--bg);
-      border: 1px solid rgba(var(--accent-rgb), 0.25);
-      padding: 2.5rem 2rem;
-      max-width: 26rem;
-      width: 90vw;
-      text-align: center;
-      position: relative;
-    }
-    .lightbox__close {
-      position: absolute;
-      top: 0.75rem; right: 0.75rem;
-      background: transparent;
-      border: 0;
-      color: var(--muted);
-      cursor: pointer;
-      padding: 0.25rem;
-    }
-    .lightbox__close:hover { color: var(--text); }
-    .lightbox__close svg { width: 1.25rem; height: 1.25rem; display: block; }
-    .lightbox__text {
-      font-size: 1rem;
-      color: var(--muted);
-      margin-bottom: 1.5rem;
-      line-height: 1.5;
-    }
-    .lightbox__form {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      align-items: center;
-    }
-    .lightbox__input {
-      width: 100%;
-      padding: 0.7rem 0.85rem;
-      font-family: "Source Sans 3", sans-serif;
-      font-size: 0.95rem;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.15);
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .lightbox__input::placeholder { color: var(--muted); }
-    .lightbox__input:focus { border-color: var(--accent); }
-    .lightbox__submit {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 0.7rem 1.75rem;
-      font-family: "Source Sans 3", sans-serif;
-      font-weight: 500;
-      font-size: 0.95rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--bg);
-      background: var(--accent);
-      border: 1px solid var(--accent);
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-    .lightbox__submit:hover { opacity: 0.85; }
-    .lightbox__thanks {
-      display: none;
-      font-size: 1rem;
-      color: var(--accent);
-      font-weight: 500;
-    }
-  </style>
-</head>
-<body>
-
-  <header class="header" role="banner">
-    <button type="button" class="header__menu-btn" id="menu-toggle" aria-expanded="false" aria-controls="menu-overlay" aria-label="Open menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <path d="M12 5v14M5 12h14"/>
-      </svg>
-    </button>
-    <a href="/" class="header__logo" aria-label="TorchLit home">
-      <dotlottie-player src="/animations/streak-fire-orange.json" autoplay loop background="transparent" style="width:100%;height:100%;"></dotlottie-player>
-    </a>
-  </header>
-
-  <div class="menu-overlay" id="menu-overlay" aria-hidden="true">
-    <nav aria-label="Main menu">
-      <ul class="menu-overlay__nav">
-        <li><a href="/tribe.html">Tribe</a></li>
-        <li><a href="/story.html">Story</a></li>
-      </ul>
-    </nav>
-  </div>
-
-  <main class="main" id="main">
-    <div class="lockup" aria-label="TorchLit Games">
-      <dotlottie-player
-        src="/animations/torchlit_lockup.lottie"
-        autoplay
-        loop
-        background="transparent"
-        style="width:100%;height:auto;">
-      </dotlottie-player>
-    </div>
-    <p class="main__body">Stories are how we find each other.</p>
-    <p class="main__body">They can blind and betray us to our demons — or compel us to conquer them. They can congeal cults or sow the seeds of revolution.</p>
-    <p class="main__body">Games are the only vessel capable of carrying the depth of what drives us. Action. Empathy. Emotion. Accountability.</p>
-    <p class="main__body" style="color: var(--accent);">Every movement starts in the dark.</p>
-    <p class="main__body">The torch is lit. Join us.</p>
-    <p class="main__body"><em>We will forge a better world — or burn it down, trying.</em></p>
-    <button type="button" class="main__cta" id="join-btn">Join us</button>
-  </main>
-
-  <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-label="Join us">
-    <div class="lightbox__card">
-      <button type="button" class="lightbox__close" id="lightbox-close" aria-label="Close">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    <!-- lottie-web removed -->
+  </head>
+  <body>
+    <header class="header" role="banner">
+      <button
+        type="button"
+        class="header__menu-btn"
+        id="menu-toggle"
+        aria-expanded="false"
+        aria-controls="menu-overlay"
+        aria-label="Open menu"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        >
+          <path d="M12 5v14M5 12h14" />
+        </svg>
       </button>
-      <p class="lightbox__text">For news and updates on what we're building, enter your email.</p>
-      <form class="lightbox__form" id="lightbox-form">
-        <input type="email" class="lightbox__input" placeholder="Email" required autocomplete="email" />
-        <button type="submit" class="lightbox__submit">Submit</button>
-      </form>
-      <p class="lightbox__thanks" id="lightbox-thanks">You're in. We'll be in touch.</p>
+
+      <a href="/" class="header__logo" aria-label="Oliver Studio home">
+        Oliver Studio
+      </a>
+    </header>
+
+    <div class="menu-overlay" id="menu-overlay" aria-hidden="true">
+      <nav aria-label="Main menu">
+        <ul class="menu-overlay__nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="/projects.html">Projects</a></li>
+          <li><a href="/services.html">Services</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="#" class="js-join-btn">Contact</a></li>
+        </ul>
+      </nav>
     </div>
-  </div>
 
-  <script>
-    (() => {
-      const menuToggle = document.getElementById("menu-toggle");
-      const menuOverlay = document.getElementById("menu-overlay");
+    <main class="main" id="main">
+      <div class="lockup" aria-label="Oliver Studio">
+        <h1 style="font-family: 'Oswald', sans-serif; font-size: clamp(3rem, 8vw, 6rem); text-transform: uppercase; margin-bottom: 0; line-height: 1; letter-spacing: 0.05em;">Oliver Studio</h1>
+        <h2 style="font-family: 'Source Sans 3', sans-serif; font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 300; margin-top: 0.5rem; color: var(--muted); margin-bottom: 3rem;">Residential &amp; Hospitality Interiors</h2>
+      </div>
 
-      menuToggle.addEventListener("click", () => {
-        const isOpen = menuOverlay.classList.toggle("is-open");
-        menuToggle.setAttribute("aria-expanded", String(isOpen));
-        menuOverlay.setAttribute("aria-hidden", String(!isOpen));
-      });
+      <p class="main__body reveal" style="font-size: 1.35rem; font-weight: 500; color: var(--accent);">
+        We approach interiors through the lens of storytelling — layering art, furniture, lighting, and architecture to create spaces with mood, character, and depth.
+      </p>
+      <p class="main__body reveal">
+        Oliver Studio is a Los Angeles–based interior studio specializing in residential and hospitality interiors. Founded by television showrunner and writer Tracy Oliver, the studio brings a cinematic approach to space — blending sculptural furniture, contemporary art, and thoughtful lighting to create environments that feel layered, expressive, and lived in.
+      </p>
 
-      menuOverlay.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          menuOverlay.classList.remove("is-open");
-          menuToggle.setAttribute("aria-expanded", "false");
-          menuOverlay.setAttribute("aria-hidden", "true");
-        });
-      });
+      <a href="/projects.html" class="btn-primary main__cta reveal">
+        View Projects
+      </a>
+    </main>
 
-      const lightbox = document.getElementById("lightbox");
-      const joinBtn = document.getElementById("join-btn");
-      const closeBtn = document.getElementById("lightbox-close");
-      const form = document.getElementById("lightbox-form");
-      const thanks = document.getElementById("lightbox-thanks");
+    <div
+      class="lightbox"
+      id="lightbox"
+      aria-modal="true"
+      role="dialog"
+      aria-label="Contact us"
+    >
+      <div class="lightbox__card">
+        <button
+          type="button"
+          class="lightbox__close"
+          id="lightbox-close"
+          aria-label="Close"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          >
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+        <h2 class="lightbox__title">Contact Studio</h2>
+        <p class="lightbox__text">
+          Get in touch with us regarding your next project at <a href="mailto:studio@oliverstudio.com" style="color: var(--accent);">studio@oliverstudio.com</a>
+        </p>
+        <form class="lightbox__form" id="lightbox-form">
+          <input
+            type="text"
+            class="lightbox__input"
+            placeholder="Name"
+            required
+            autocomplete="name"
+          />
+          <input
+            type="email"
+            class="lightbox__input"
+            placeholder="Email Address"
+            required
+            autocomplete="email"
+          />
+          <input
+            type="text"
+            class="lightbox__input"
+            placeholder="Project Type"
+            required
+          />
+          <button type="submit" class="btn-primary lightbox__submit">
+            Submit
+          </button>
+        </form>
+        <p class="lightbox__thanks" id="lightbox-thanks">
+          Received.<br />We'll be in touch.
+        </p>
+      </div>
+    </div>
 
-      joinBtn.addEventListener("click", () => lightbox.classList.add("is-open"));
-      closeBtn.addEventListener("click", () => lightbox.classList.remove("is-open"));
-      lightbox.addEventListener("click", (e) => {
-        if (e.target === lightbox) lightbox.classList.remove("is-open");
-      });
-
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        form.style.display = "none";
-        thanks.style.display = "block";
-      });
-    })();
-  </script>
-</body>
+    <!-- Global Logic -->
+    <script src="/scripts/main.js"></script>
+  </body>
 </html>

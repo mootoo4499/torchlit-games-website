@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Oliver Studio - About" />
+    <title>About | Oliver Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="/styles/main.css" />
+  </head>
+  <body>
+    <header class="header" role="banner">
+      <button type="button" class="header__menu-btn" id="menu-toggle" aria-expanded="false" aria-controls="menu-overlay" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+      </button>
+      <a href="/" class="header__logo" aria-label="Oliver Studio home">Oliver Studio</a>
+    </header>
+
+    <div class="menu-overlay" id="menu-overlay" aria-hidden="true">
+      <nav aria-label="Main menu">
+        <ul class="menu-overlay__nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="/projects.html">Projects</a></li>
+          <li><a href="/services.html">Services</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="#" class="js-join-btn">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <main class="main main--aligned-start" id="main">
+      <section class="hero reveal">
+        <h1 class="hero__title">About the Studio</h1>
+        <p class="hero__lede">Oliver Studio is a Los Angeles–based interior studio focused on residential and hospitality interiors.</p>
+        <p class="hero__body">
+          Founded by television showrunner and writer Tracy Oliver, the studio approaches interiors through the lens of storytelling. Drawing on a background in visual narrative and set design, each space is treated as a composition — where art, furniture, lighting, and architecture work together to create mood and character.
+        </p>
+        <p class="hero__body" style="margin-top: 1rem;">
+          The studio’s work blends sculptural furniture, contemporary art, and warm modern materials to create spaces that feel layered, expressive, and deeply livable.
+        </p>
+      </section>
+
+      <p class="footer-note reveal">Oliver Studio — Residential &amp; Hospitality Interiors</p>
+    </main>
+
+    <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-label="Contact us">
+      <div class="lightbox__card">
+        <button type="button" class="lightbox__close" id="lightbox-close" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+        <h2 class="lightbox__title">Contact Studio</h2>
+        <p class="lightbox__text">
+          Get in touch with us regarding your next project at <a href="mailto:studio@oliverstudio.com" style="color: var(--accent);">studio@oliverstudio.com</a>
+        </p>
+        <form class="lightbox__form" id="lightbox-form">
+          <input type="text" class="lightbox__input" placeholder="Name" required autocomplete="name" />
+          <input type="email" class="lightbox__input" placeholder="Email Address" required autocomplete="email" />
+          <input type="text" class="lightbox__input" placeholder="Project Type" required />
+          <button type="submit" class="btn-primary lightbox__submit">Submit</button>
+        </form>
+        <p class="lightbox__thanks" id="lightbox-thanks">Received.<br />We'll be in touch.</p>
+      </div>
+    </div>
+
+    <script src="/scripts/main.js"></script>
+  </body>
+</html>
