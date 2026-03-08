@@ -208,7 +208,7 @@ body {
 .menu-overlay__nav a {
   font-family: "Playfair Display", serif;
   font-size: clamp(2.5rem, 8vw, 4.5rem);
-  font-weight: 400;
+  font-weight: 600; /* Match Oliver logo font-weight */
   line-height: 1.1;
   color: var(--text);
   text-decoration: none;
