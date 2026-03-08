@@ -1,13 +1,13 @@
 /* styles/main.css - Global Styles and Variables */
 
 :root {
-  --bg: #F7F5F0; /* Elegant soft cream/off-white background */
-  --bg-gradient: #F7F5F0;
+  --bg: #F4F1EA; /* Elegant richer off-white background */
+  --bg-gradient: #F4F1EA;
   --text: #222222; /* Deep jet/charcoal text for high contrast */
   --accent: #8A7B6B; /* Warm subdued taupe */
   --accent-rgb: 138, 123, 107;
   --muted: #767676;
-  --nav-bg: rgba(247, 245, 240, 0.92); /* Frosted cream nav */
+  --nav-bg: rgba(216, 210, 199, 0.96); /* Darker warm taupe nav bar */
   --glass-border: rgba(0, 0, 0, 0.08); /* Subtle dark border lines */
 }
 
