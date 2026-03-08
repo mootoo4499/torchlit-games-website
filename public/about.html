@@ -72,42 +72,9 @@
       <p style="font-size: 0.85rem;"><a href="#" class="js-join-btn" style="color: var(--text); text-decoration: none; border-bottom: 1px solid var(--text); padding-bottom: 2px;">Contact Us</a></p>
     </footer>
 
-    <!-- Password Protection Overlay -->
-    <div id="password-gate" style="position: fixed; inset: 0; z-index: 9999; background: var(--bg); display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 2rem;">
-      <h2 style="font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 1rem; color: var(--text);"><b>Oliver</b><span style="opacity: 0.6; font-style: italic;">Studio</span> Client Access</h2>
-      <form id="gate-form" style="display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 320px;">
-        <input type="text" id="gate-user" placeholder="Username" required style="padding: 0.85rem 1rem; font-family: 'Inter', sans-serif; font-size: 1rem; border: 1px solid rgba(0,0,0,0.2); background: transparent; outline: none;" />
-        <input type="password" id="gate-pass" placeholder="Password" required style="padding: 0.85rem 1rem; font-family: 'Inter', sans-serif; font-size: 1rem; border: 1px solid rgba(0,0,0,0.2); background: transparent; outline: none;" />
-        <button type="submit" class="btn-primary" style="margin-top: 0;">Enter</button>
-        <p id="gate-error" style="color: #c94c4c; font-size: 0.9rem; display: none; margin-top: 0.5rem;">Incorrect credentials.</p>
-      </form>
-    </div>
-
     <script src="/scripts/main.js"></script>
     <script>
       document.getElementById('year').textContent = new Date().getFullYear();
-      
-      // Password Protection Logic
-      const gate = document.getElementById('password-gate');
-      const gateForm = document.getElementById('gate-form');
-      const userField = document.getElementById('gate-user');
-      const passField = document.getElementById('gate-pass');
-      const errField = document.getElementById('gate-error');
-
-      if(sessionStorage.getItem('oliver_auth') === 'true') {
-        gate.style.display = 'none';
-      }
-
-      gateForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        if(userField.value.trim().toLowerCase() === 'oliver' && passField.value === 'password123') {
-          sessionStorage.setItem('oliver_auth', 'true');
-          gate.style.opacity = '0';
-          setTimeout(() => gate.style.display = 'none', 300);
-        } else {
-          errField.style.display = 'block';
-        }
-      });
     </script>
   </body>
 </html>
